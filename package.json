@@ -4,9 +4,11 @@
   "description": "Awesome project developed with TypeORM.",
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
+    "@types/ioredis": "^4.0.13",
     "@types/jest": "^24.0.15",
     "@types/node": "^12.6.8",
     "@types/uuid": "^3.4.5",
+    "@types/yup": "^0.26.22",
     "cross-env": "^5.2.0",
     "gql2ts": "^1.10.1",
     "jest": "^24.8.0",
@@ -25,10 +27,12 @@
     "graphql-request": "^1.8.2",
     "graphql-tools": "^4.0.5",
     "graphql-yoga": "^1.18.1",
+    "ioredis": "^4.11.2",
     "mongodb": "^3.0.8",
     "reflect-metadata": "^0.1.10",
     "typeorm": "0.2.18",
-    "uuid": "^3.3.2"
+    "uuid": "^3.3.2",
+    "yup": "^0.27.0"
   },
   "scripts": {
     "start": "cross-env NODE_ENV=development nodemon --exec ts-node src/index.ts",
