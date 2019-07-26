@@ -43,7 +43,7 @@ export const resolvers: ResolverMap = {
 
       const userAlreadyExists = await User.findOne({
         where: { email },
-        select: ["id"]
+        select: ["_id"]
       });
 
       if (userAlreadyExists) {
@@ -63,7 +63,7 @@ export const resolvers: ResolverMap = {
 
       await user.save();
 
-      await createConfirmEmailLink(url, user.id.toString(), redis);
+      await createConfirmEmailLink(url, user._id, redis);
 
       return null;
     }

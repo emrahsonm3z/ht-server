@@ -10,7 +10,8 @@ import {
 @Entity()
 export class User extends BaseEntity {
   @ObjectIdColumn()
-  id: ObjectID;
+  // tslint:disable-next-line:variable-name
+  _id: ObjectID;
 
   @Column("varchar", { length: 255, unique: true })
   email: string;
