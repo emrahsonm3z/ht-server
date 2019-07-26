@@ -20,8 +20,10 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "dotenv": "^8.0.0",
+    "graphql": "^14.4.2",
     "graphql-import": "^0.7.1",
     "graphql-request": "^1.8.2",
+    "graphql-tools": "^4.0.5",
     "graphql-yoga": "^1.18.1",
     "mongodb": "^3.0.8",
     "reflect-metadata": "^0.1.10",
@@ -30,7 +32,6 @@
   },
   "scripts": {
     "start": "cross-env NODE_ENV=development nodemon --exec ts-node src/index.ts",
-    "test-server": "cross-env NODE_ENV=test ts-node src/index.ts",
     "test": "cross-env NODE_ENV=test jest",
     "gen-schema-types": "gql2ts src/schema.graphql -o src/types/schema.d.ts"
   },
