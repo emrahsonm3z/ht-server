@@ -7,11 +7,13 @@ import {
   BeforeInsert
 } from "typeorm";
 
-@Entity()
+import * as bcrypt from "bcryptjs";
+
+@Entity("users")
 export class User extends BaseEntity {
-  @ObjectIdColumn()
+  @ObjectIdColumn({ name: "_id" })
   // tslint:disable-next-line:variable-name
-  _id: ObjectID;
+  id: ObjectID;
 
   @Column("varchar", { length: 255, unique: true })
   email: string;
@@ -22,7 +24,8 @@ export class User extends BaseEntity {
   confirmed: boolean;
 
   @BeforeInsert()
-  beforeInsertActions() {
-    this.confirmed = false;
+  async beforeInsertActions() {
+    this.confirmed = this.confirmed === undefined ? false : this.confirmed;
+    this.password = await bcrypt.hash(this.password, 10);
   }
 }

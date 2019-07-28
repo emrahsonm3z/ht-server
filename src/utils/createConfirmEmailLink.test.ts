@@ -1,12 +1,13 @@
 import * as Redis from "ioredis";
 import fetch from "node-fetch";
-import { Connection, ObjectID } from "typeorm";
+import { Connection } from "typeorm";
+import { ObjectId } from "mongodb";
 
 import { createConfirmEmailLink } from "./createConfirmEmailLink";
 import { createTypeormConn } from "./createTypeormConn";
 import { User } from "../entity/User";
 
-let userId: ObjectID;
+let userId: string;
 const redis = new Redis();
 
 let conn: Connection;
@@ -17,11 +18,11 @@ beforeAll(async () => {
     email: "bob5@bob.com",
     password: "jlkajoioiqwe"
   }).save();
-  userId = user._id;
+  userId = user.id.toString();
 });
 
 afterAll(async () => {
-  await conn.close();
+  conn.close();
 });
 
 test("Make sure it confirms user and clears key in redis", async () => {
@@ -34,7 +35,7 @@ test("Make sure it confirms user and clears key in redis", async () => {
   const response = await fetch(url);
   const text = await response.text();
   expect(text).toEqual("ok");
-  const user = await User.findOne({ where: { _id: userId } });
+  const user = await User.findOne({ where: { id: new ObjectId(userId) } });
   expect((user as User).confirmed).toBeTruthy();
   const chunks = url.split("/");
   const key = chunks[chunks.length - 1];

@@ -1,12 +1,11 @@
 import { v4 } from "uuid";
 import { Redis } from "ioredis";
-import { ObjectID } from "typeorm";
 // http://localhost:4000
 // https://my-site.com
 // => https://my-site.com/confirm/<id>
 export const createConfirmEmailLink = async (
   url: string,
-  userId: ObjectID,
+  userId: string,
   redis: Redis
 ) => {
   const id = v4();
