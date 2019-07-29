@@ -8,11 +8,11 @@ import { createConfirmEmailLink } from "./createConfirmEmailLink";
 import { User } from "../../../entity/User";
 import { createTestConn } from "../../../testUtils/createTestConn";
 
-let userId: string = "";
 const redis = new Redis();
+faker.seed(Date.now() + 4);
 
 let conn: Connection;
-
+let userId: string;
 beforeAll(async () => {
   conn = await createTestConn();
   const user = await User.create({
