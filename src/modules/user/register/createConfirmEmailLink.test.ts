@@ -5,8 +5,8 @@ import * as faker from "faker";
 import { ObjectId } from "mongodb";
 
 import { createConfirmEmailLink } from "./createConfirmEmailLink";
-import { User } from "../../entity/User";
-import { createTestConn } from "../../testUtils/createTestConn";
+import { User } from "../../../entity/User";
+import { createTestConn } from "../../../testUtils/createTestConn";
 
 let userId: string = "";
 const redis = new Redis();

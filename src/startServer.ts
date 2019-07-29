@@ -76,7 +76,7 @@ export const startServer = async () => {
     cors,
     port: process.env.NODE_ENV === "test" ? 0 : 4000
   });
-  console.log("Server is running on localhost:4000");
+  console.log("Server is running on http://localhost:4000");
 
   return app;
 };
