@@ -9,6 +9,7 @@ import { userNotFoundError, expiredKeyError } from "./errorMessages";
 import { forgotPasswordPrefix } from "../../constants";
 import { registerPasswordValidation } from "../../yupSchemas";
 import { formatYupError } from "../../utils/formatYupError";
+import { ObjectId } from "mongodb";
 
 // 20 minutes
 // lock account
@@ -69,7 +70,7 @@ export const resolvers: ResolverMap = {
       const hashedPassword = await bcrypt.hash(newPassword, 10);
 
       const updatePromise = User.update(
-        { id: userId },
+        { id: new ObjectId(userId) },
         {
           forgotPasswordLocked: false,
           password: hashedPassword
