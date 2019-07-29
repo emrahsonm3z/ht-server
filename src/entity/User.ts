@@ -22,9 +22,16 @@ export class User extends BaseEntity {
   @Column("boolean")
   confirmed: boolean;
 
+  @Column("boolean")
+  forgotPasswordLocked: boolean;
+
   @BeforeInsert()
   async beforeInsertActions() {
     this.confirmed = this.confirmed === undefined ? false : this.confirmed;
+    this.forgotPasswordLocked =
+      this.forgotPasswordLocked === undefined
+        ? false
+        : this.forgotPasswordLocked;
     this.password = await bcrypt.hash(this.password, 10);
   }
 }
