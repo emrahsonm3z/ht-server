@@ -35,8 +35,10 @@ test("Make sure it confirms user and clears key in redis", async () => {
   const response = await fetch(url);
   const text = await response.text();
   expect(text).toEqual("ok");
-  const user = await User.findOne({ where: { id: new ObjectId(userId) } });
+
+  const user = await User.findOne({ where: { _id: new ObjectId(userId) } });
   expect((user as User).confirmed).toBeTruthy();
+
   const chunks = url.split("/");
   const key = chunks[chunks.length - 1];
   const value = await redis.get(key);

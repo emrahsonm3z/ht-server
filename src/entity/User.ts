@@ -12,7 +12,6 @@ import * as bcrypt from "bcryptjs";
 @Entity("users")
 export class User extends BaseEntity {
   @ObjectIdColumn({ name: "_id" })
-  // tslint:disable-next-line:variable-name
   id: ObjectID;
 
   @Column("varchar", { length: 255, unique: true })

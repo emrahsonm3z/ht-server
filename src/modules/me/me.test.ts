@@ -5,7 +5,7 @@ import { Connection } from "typeorm";
 
 let userId: string;
 let conn: Connection;
-const email = "bob7@bob.com";
+const email = "bob8@bob.com";
 const password = "jlkajoioiqwe";
 
 beforeAll(async () => {
@@ -19,7 +19,7 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await conn.close();
+  conn.close();
 });
 
 const loginMutation = (e: string, p: string) => `
@@ -41,12 +41,16 @@ const meQuery = `
 `;
 
 describe("me", () => {
-  // test("can't get user if not logged in", async () => {
-  // later
-  // });
+  test("return null if no cookie", async () => {
+    const response = await axios.post(process.env.TEST_HOST as string, {
+      query: meQuery
+    });
+
+    expect(response.data.data.me).toBeNull();
+  });
 
   test("get current user", async () => {
-    const login = await axios.post(
+    await axios.post(
       process.env.TEST_HOST as string,
       {
         query: loginMutation(email, password)
@@ -55,7 +59,7 @@ describe("me", () => {
         withCredentials: true
       }
     );
-    console.log("login response", login.data);
+
     const response = await axios.post(
       process.env.TEST_HOST as string,
       {
@@ -65,8 +69,6 @@ describe("me", () => {
         withCredentials: true
       }
     );
-
-    console.log("response", response.data);
 
     expect(response.data.data).toEqual({
       me: {

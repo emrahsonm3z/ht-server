@@ -32,7 +32,7 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await conn.close();
+  conn.close();
 });
 const loginExpectError = async (e: string, p: string, errMsg: string) => {
   const response = await request(
