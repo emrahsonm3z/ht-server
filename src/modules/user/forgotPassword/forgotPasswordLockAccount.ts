@@ -1,6 +1,6 @@
 import { Redis } from "ioredis";
-import { removeAllUserSessions } from "./removeAllUserSessions";
-import { User } from "../entity/User";
+import { removeAllUserSessions } from "../../../utils/removeAllUserSessions";
+import { User } from "../../../entity/User";
 import { ObjectId } from "mongodb";
 
 export const forgotPasswordLockAccount = async (

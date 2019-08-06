@@ -1,33 +1,43 @@
-import * as nodemailer from "nodemailer";
+import Mailer from "./emailService";
+import emailTemplateList from "../mailTemplate";
 
-const from = '"Hasta takip" <info@hastatakip.com>';
+const isProd = process.env.NODE_ENV === "production";
 
-const setup = async () => {
-  const transport = await nodemailer.createTransport({
-    host: "smtp.mailtrap.io",
-    port: 2525,
-    auth: {
-      user: "7fffc88f4cb247",
-      pass: "a211444c5092f6"
+const mailerConfig = {
+  defaults: {
+    from: {
+      name: isProd
+        ? (process.env.EMAIL_FROM_NAME as string)
+        : (process.env.EMAIL_TEST_FROM_NAME as string),
+      address: isProd
+        ? (process.env.EMAIL_FROM_ADDRESS as string)
+        : (process.env.EMAIL_TEST_FROM_ADDRESS as string)
     }
-  });
-
-  return transport;
+  },
+  transport: {
+    host: isProd
+      ? (process.env.EMAIL_HOST as string)
+      : (process.env.EMAIL_TEST_HOST as string),
+    port: isProd
+      ? (process.env.EMAIL_PORT as number | undefined)
+      : (process.env.EMAIL_TEST_PORT as number | undefined),
+    auth: {
+      user: isProd
+        ? (process.env.EMAIL_USER as string)
+        : (process.env.EMAIL_TEST_USER as string),
+      pass: isProd
+        ? (process.env.EMAIL_PASS as string)
+        : (process.env.EMAIL_TEST_PASS as string)
+    }
+    // secure: false,
+    // tls: {
+    //   rejectUnauthorized: false
+    // },
+    // debug: true, // show debug output
+    // logger: true // log information in console
+  }
 };
 
-export const sendConfirmationEmail = async (recipient: string, url: string) => {
-  const transport = await setup();
+const mailer = Mailer(mailerConfig, emailTemplateList);
 
-  const email = {
-    from,
-    to: recipient,
-    subject: "Hasta takip sistemine hoş geldiniz.",
-    text: `
-    Lütfen email adresinizi onaylanıyınız.
-
-    ${url}
-    `
-  };
-
-  await transport.sendMail(email);
-};
+export default mailer;

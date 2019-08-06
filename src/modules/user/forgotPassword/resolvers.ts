@@ -2,8 +2,8 @@ import * as yup from "yup";
 import * as bcrypt from "bcryptjs";
 
 import { ResolverMap } from "../../../types/graphql-utils";
-import { forgotPasswordLockAccount } from "../../../utils/forgotPasswordLockAccount";
-import { createForgotPasswordLink } from "../../../utils/createForgotPasswordLink";
+import { forgotPasswordLockAccount } from "./forgotPasswordLockAccount";
+import { createForgotPasswordLink } from "./createForgotPasswordLink";
 import { User } from "../../../entity/User";
 import { userNotFoundError, expiredKeyError } from "./errorMessages";
 import { forgotPasswordPrefix } from "../../../constants";

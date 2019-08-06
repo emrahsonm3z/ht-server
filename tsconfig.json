@@ -6,7 +6,7 @@
     "sourceMap": true,
     "outDir": "./dist",
     "moduleResolution": "node",
-
+    "jsx": "react",
     "removeComments": true,
     "noImplicitAny": true,
     "strictNullChecks": true,

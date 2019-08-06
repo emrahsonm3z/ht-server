@@ -22,11 +22,7 @@ column: number;
 
 interface IQuery {
 __typename: "Query";
-dummy2: string | null;
-bye2: string | null;
-dummy: string | null;
 me: IUser | null;
-bye: string | null;
 }
 
 interface IUser {

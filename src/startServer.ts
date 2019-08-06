@@ -13,7 +13,6 @@ import { genSchema } from "./utils/genSchema";
 import { redisSessionPrefix } from "./constants";
 import { createTestConn } from "./testUtils/createTestConn";
 
-const SESSION_SECRET = "ajslkjalksjdfkl";
 const RedisStore = connectRedis(session as any);
 
 export const startServer = async () => {
@@ -48,7 +47,7 @@ export const startServer = async () => {
         prefix: redisSessionPrefix
       }),
       name: "qid",
-      secret: SESSION_SECRET,
+      secret: process.env.SESSION_SECRET,
       resave: false,
       saveUninitialized: false,
       cookie: {
@@ -61,7 +60,10 @@ export const startServer = async () => {
 
   const cors = {
     credentials: true,
-    origin: process.env.NODE_ENV === "test" ? "*" : "http://localhost:3000"
+    origin:
+      process.env.NODE_ENV === "test"
+        ? "*"
+        : (process.env.FRONTEND_HOST as string)
   };
 
   server.express.get("/confirm/:id", confirmEmail);
@@ -74,9 +76,12 @@ export const startServer = async () => {
 
   const app = await server.start({
     cors,
-    port: process.env.NODE_ENV === "test" ? 0 : 4000
+    port: process.env.NODE_ENV === "test" ? 0 : process.env.PORT
   });
-  console.log("Server is running on http://localhost:4000");
+
+  if (process.env.NODE_ENV !== "test") {
+    console.log(`Server is running on http://localhost:${process.env.PORT}`);
+  }
 
   return app;
 };
