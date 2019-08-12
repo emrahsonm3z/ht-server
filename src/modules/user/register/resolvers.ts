@@ -3,21 +3,16 @@ import * as yup from "yup";
 import { ResolverMap } from "../../../types/graphql-utils";
 import { User } from "../../../entity/User";
 import { formatYupError } from "../../../utils/formatYupError";
+import { duplicateEmail } from "./errorMessages";
 import {
-  duplicateEmail,
-  emailNotLongEnough,
-  invalidEmail
-} from "./errorMessages";
-import { registerPasswordValidation } from "../../../yupSchemas";
+  registerPasswordValidation,
+  emailValidation
+} from "../../../yupSchemas";
 import mailer from "../../../utils/sendEmail";
 import { createConfirmEmailLink } from "./createConfirmEmailLink";
 
 const schema = yup.object().shape({
-  email: yup
-    .string()
-    .min(3, emailNotLongEnough)
-    .max(255)
-    .email(invalidEmail),
+  email: emailValidation,
   password: registerPasswordValidation
 });
 
@@ -60,8 +55,6 @@ export const resolvers: ResolverMap = {
       mailer.send(
         "confirmationEmail",
         {
-          firstName: "emrah",
-          lastName: "sönmez",
           url: await createConfirmEmailLink(url, user.id.toString(), redis)
         },
         { to: email }

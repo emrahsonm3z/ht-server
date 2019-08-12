@@ -61,7 +61,7 @@
     "react-dom": "^16.8.6",
     "reflect-metadata": "^0.1.10",
     "request-promise": "^4.2.4",
-    "typeorm": "0.2.18",
+    "typeorm": "^0.2.18",
     "uuid": "^3.3.2",
     "yup": "^0.27.0"
   },
