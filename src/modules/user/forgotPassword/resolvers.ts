@@ -10,6 +10,7 @@ import { forgotPasswordPrefix } from "../../../constants";
 import { registerPasswordValidation } from "../../../yupSchemas";
 import { formatYupError } from "../../../utils/formatYupError";
 import { ObjectId } from "mongodb";
+import mailer from "../../../utils/sendEmail";
 
 // 20 minutes
 // lock account
@@ -23,7 +24,7 @@ export const resolvers: ResolverMap = {
     sendForgotPasswordEmail: async (
       _,
       { email }: GQL.ISendForgotPasswordEmailOnMutationArguments,
-      { redis }
+      { redis, url }
     ) => {
       const user = await User.findOne({ where: { email } });
       if (!user) {
@@ -36,9 +37,15 @@ export const resolvers: ResolverMap = {
       }
 
       await forgotPasswordLockAccount(user.id.toString(), redis);
-      // @todo add frontend url
-      await createForgotPasswordLink("", user.id.toString(), redis);
-      // @todo send email with url
+      // TODO add frontend url
+
+      mailer.send(
+        "forgotPasswordEmail",
+        {
+          url: await createForgotPasswordLink(url, user.id.toString(), redis)
+        },
+        { to: email }
+      );
       return true;
     },
     forgotPasswordChange: async (
