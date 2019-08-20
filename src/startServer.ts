@@ -5,6 +5,7 @@ import * as session from "express-session";
 import * as connectRedis from "connect-redis";
 import * as RateLimit from "express-rate-limit";
 import * as RateLimitRedisStore from "rate-limit-redis";
+import { getConnection } from "typeorm";
 
 import { redis } from "./redis";
 import { createTypeormConn } from "./utils/createTypeormConn";
@@ -14,7 +15,7 @@ import { redisSessionPrefix } from "./constants";
 import { createTestConn } from "./testUtils/createTestConn";
 import { logManager } from "./utils/logManager";
 import { setupErrorHandling } from "./utils/shutdown";
-import { getConnection } from "typeorm";
+// import auth from "./auth";
 
 const logger = logManager();
 logger.info("Loading environment...");
@@ -23,6 +24,13 @@ const SESSION_SECRET = process.env.SESSION_SECRET;
 const RedisStore = connectRedis(session as any);
 
 export const startServer = async () => {
+  logger.info("Connecting database...");
+  if (process.env.NODE_ENV === "test") {
+    await createTestConn(true);
+  } else {
+    await createTypeormConn();
+  }
+
   if (process.env.NODE_ENV === "test") {
     await redis.flushall();
   }
@@ -53,6 +61,9 @@ export const startServer = async () => {
 
     return next();
   });
+
+  // Passport middleware
+  // server.express.use(auth());
 
   server.express.use(
     new RateLimit({
@@ -94,20 +105,15 @@ export const startServer = async () => {
 
   server.express.get("/confirm/:id", confirmEmail);
 
-  logger.info("Connecting database...");
-  if (process.env.NODE_ENV === "test") {
-    await createTestConn(true);
-  } else {
-    await createTypeormConn();
-  }
-
   const app = await server.start({
     cors,
     port: process.env.NODE_ENV === "test" ? 0 : process.env.PORT
   });
 
   if (process.env.NODE_ENV !== "test") {
-    console.log(`Server is running on http://localhost:${process.env.PORT}`);
+    logger.info(
+      `🚀  Server is running on http://localhost:${process.env.PORT}`
+    );
   }
 
   setupErrorHandling({
