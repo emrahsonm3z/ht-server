@@ -23,7 +23,7 @@
     "name": "test",
     "type": "mongodb",
     "host": "ds351807.mlab.com",
-    "port": 51247,
+    "port": 51807,
     "username": "admin",
     "password": "emrah123",
     "database": "hastatakip-test",
